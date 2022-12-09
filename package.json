@@ -10,14 +10,52 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:chatgpt-vscode.helloWorld"
+    "onStartupFinished"
   ],
   "main": "./extension.js",
   "contributes": {
-    "commands": [{
-      "command": "chatgpt-vscode.helloWorld",
-      "title": "Hello World"
-    }]
+    "commands": [
+      {
+        "command": "chatgpt-login",
+        "title": "chatgpt登录"
+      },
+      {
+        "command": "chatgpt-explain",
+        "title": "代码解释器"
+      },
+      {
+        "command": "extension.selection",
+        "title": "选中文本"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "submenu": "git.stage",
+          "group": "navigation"
+        }
+      ],
+      "git.stage": [
+        {
+          "command": "chatgpt-login",
+          "group": "navigation"
+        },
+        {
+          "command": "chatgpt-explain",
+          "group": "1-chat@1"
+        },
+        {
+          "command": "extension.selection",
+          "group": "1-chat@2"
+        }
+      ]
+    },
+    "submenus": [
+      {
+        "id": "git.stage",
+        "label": "ChatGTP辅助插件"
+      }
+    ]
   },
   "scripts": {
     "lint": "eslint .",
