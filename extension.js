@@ -1,12 +1,15 @@
 const vscode = require("vscode");
+const ChatgptVsCode = require("./chatgpt");
+const chatGPT = new ChatgptVsCode();
 
+const { readTokenSync, updateTokenSync } = require("./utils");
 /**
  * @param {vscode.ExtensionContext} context
  */
 
 function activate(context) {
   console.log("插件 【chatgpt-vscode】开始工作了!", context);
-  
+
   let test = vscode.commands.registerCommand("chatgpt-explain", function (url) {
     console.log("url", url);
     vscode.window.showInformationMessage("代码解释");
@@ -38,8 +41,10 @@ function activate(context) {
 // This method is called when your extension is deactivated
 function deactivate() {}
 
-async function userLogin() {
-  const { ChatGPTAPI } = await import('chatgpt')
+/**
+ * @desc 用户登录
+ */
+function userLogin() {
   const result = vscode.window.showInputBox({
     prompt: "在chat.openai.com/chat网页中获取cookie",
     value: "",
@@ -49,14 +54,16 @@ async function userLogin() {
     // 是按下ESC键
     if (typeof inputValue === "undefined") return;
     //按下enter键
-    const api = new ChatGPTAPI({
-      sessionToken: inputValue,
-    })
-    api.ensureAuth().then(()=>{
+    chatGPT
+      .checkUserToken(inputValue)
+      .then(() => {
+        updateTokenSync(true, inputValue);
         vscode.window.showInformationMessage("chatGPT登录成功，欢迎使用！");
-    }).catch(()=>{
-      vscode.window.showErrorMessage("chatGPT登录失败，请确认cookie的合法性")
-    })
+      })
+      .catch(() => {
+        updateTokenSync(false, "");
+        vscode.window.showErrorMessage("chatGPT登录失败，请确认cookie的合法性");
+      });
   });
 }
 
