@@ -1,14 +1,12 @@
 const vscode = require("vscode");
 
-
 /**
  * @param {vscode.ExtensionContext} context
  */
 
 function activate(context) {
   console.log("插件 【chatgpt-vscode】开始工作了!", context);
-
-  // chatgpt-explain
+  
   let test = vscode.commands.registerCommand("chatgpt-explain", function (url) {
     console.log("url", url);
     vscode.window.showInformationMessage("代码解释");
@@ -42,7 +40,6 @@ function deactivate() {}
 
 async function userLogin() {
   const { ChatGPTAPI } = await import('chatgpt')
-  // vscode.window.showInformationMessage("Hello World from chatGPT-vscode!");
   const result = vscode.window.showInputBox({
     prompt: "在chat.openai.com/chat网页中获取cookie",
     value: "",
@@ -55,9 +52,11 @@ async function userLogin() {
     const api = new ChatGPTAPI({
       sessionToken: inputValue,
     })
-    await api.ensureAuth()
-    const response = await api.sendMessage('写一个小说')
-    console.log(response)
+    api.ensureAuth().then(()=>{
+        vscode.window.showInformationMessage("chatGPT登录成功，欢迎使用！");
+    }).catch(()=>{
+      vscode.window.showErrorMessage("chatGPT登录失败，请确认cookie的合法性")
+    })
   });
 }
 
