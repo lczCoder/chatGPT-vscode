@@ -12,7 +12,7 @@ class ChatgptVsCode {
         api
           .ensureAuth()
           .then(() => resolve())
-          .catch(() => reject());
+          .catch((err) =>{console.log(err); reject()});
     });
   }
 }

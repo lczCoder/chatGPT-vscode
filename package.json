@@ -21,7 +21,7 @@
       },
       {
         "command": "chatgpt-explain",
-        "title": "代码解释器"
+        "title": "代码解释器"        
       },
       {
         "command": "extension.selection",
@@ -42,7 +42,8 @@
         },
         {
           "command": "chatgpt-explain",
-          "group": "1-chat@1"
+          "group": "1-chat@1",
+          "when": "editorHasSelection"
         },
         {
           "command": "extension.selection",
